@@ -1,5 +1,6 @@
 ---
-title: "A renda per capita dos municípios brasileiros"
+title: "A Renda per capita dos municípios brasileiros"
+subtitle: "Região Metropolitana de Porto Alegre/RS"
 author: "Luciano Teixeira"
 date: "4 de junho de 2018"
 output:
@@ -27,8 +28,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 4. Como método de análise, será utilizado regressão linear múltipla onde a VR é a renda per capita e as variáveis explicativas são as 5 escolhidas no passo 2.
 
-```{r cars}
-summary(cars)
+```{RDPC_municipio <- read_excel("~/GitHub/PosUnisinosEstatisticaAplicada/RendaPerCapta/atlas2013_municipio.xlsx")}
+View(RDPC_municipio)
 ```
 
 ## Including Plots
