@@ -36,3 +36,31 @@ atlas_m2000<- data.frame(atlas_m2000,Y_idhm_2010)
 hist(atlas_m2000$ESPVIDA)
 hist(atlas_m2000$GINI)
 hist(atlas_m2000$Y_idhm_2010)
+
+#Análise de correlação linear entre duas variáveis quantitativas
+plot(atlas_m2000$GINI,atlas_m2000$ESPVIDA)
+
+cor(atlas_m2000$GINI,atlas_m2000$ESPVIDA) # resultou: [1] -0.2618232
+
+#Análise de regressão linear com duas variáveis explicativas quantitativas
+reg2=lm(atlas_m2000$Y_idhm_2010~ atlas_m2000$ESPVIDA + atlas_m2000$GINI)
+summary(reg2)
+
+#intervalos de confiança para os coeficientes da equação
+confint(reg2)
+
+#resíduos
+plot(fitted(reg2),residuals(reg2),xlab="Valores Ajustados",ylab="Resíduos")
+abline(h=0)
+plot(atlas_m2000$GINI,residuals(reg2),xlab="GINI",ylab="Resíduos")
+abline(h=0)
+plot(atlas_m2000$ESPVIDA,residuals(reg2),xlab="ESPVIDA",ylab="Resíduos")
+abline(h=0)
+
+#avaliação da homocedasticidade dos erros: teste de igualdade entre variâncias
+a<- median(atlas_m2000$GINI)
+var.test(residuals(reg2) [atlas_m2000$GINI>a],residuals(reg2)[atlas_m2000$GINI<a])
+
+#avaliação da suposição de normalidade dos erros,
+qqnorm(residuals(reg2), ylab="Resíduos",xlab="Quantis teóricos",main="")
+qqline(residuals(reg2))
