@@ -1,7 +1,7 @@
 #Load Data Set
 
 library(readxl)
-dadosbrutos <- read_excel("~/GitHub/PosUnisinosEstatisticaAplicada/RendaPerCapta/atlas2013_municipio.xlsx")
+dadosbrutos <- read_excel("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosEstatisticaAplicada/RendaPerCapta/atlas2013_rs.xlsx")
 View(dadosbrutos)
 
 dadosbrutos
@@ -17,14 +17,14 @@ Y = RDCP
 
 #leitura da base atlas completa para municípios
 library(readxl)
-RDPC_municipio <- read_excel("~/GitHub/PosUnisinosEstatisticaAplicada/RendaPerCapta/atlas2013_municipio.xlsx")
+RDPC_municipio <- read_excel("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosEstatisticaAplicada/RendaPerCapta/atlas2013_rs.xlsx")
 #atlas_munic <- atlas2013_dadosbrutos_pt_somente_municipio
 View(RDPC_municipio)
 
 #Divisão da base do site por ano
-atlas_m1991<- subset.data.frame(atlas_munic, ANO==1991)
-atlas_m2000<- subset.data.frame(atlas_munic, ANO==2000)
-atlas_m2010<- subset.data.frame(atlas_munic, ANO==2010)
+atlas_m1991<- subset.data.frame(RDPC_municipio, ANO==1991)
+atlas_m2000<- subset.data.frame(RDPC_municipio, ANO==2000)
+atlas_m2010<- subset.data.frame(RDPC_municipio, ANO==2010)
 
 #inclusão do idh2010 na base do ano 2000
 idhm_1991 <- c(atlas_m1991$IDHM)
