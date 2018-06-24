@@ -1,19 +1,19 @@
 ---
-title: "A Renda per capita dos municípios brasileiros"
-subtitle: "Região Metropolitana de Porto Alegre/RS"
+title: "A Renda per capita de Municípios Gaúchos"
+subtitle: "Região Metropolitana de Porto Alegre"
 author: "Luciano Teixeira"
 date: "4 de junho de 2018"
 output:
-  pdf_document: default
   word_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Inrodução da Análise
+## Introdução da Análise
 
 1. O arquivo utilizado, se refere aos dados municipais do Atlas do desenvolvimento humano no Brasil referentes aos Censos 2000 e 2010 em http://www.atlasbrasil.org.br/2013/pt/download/
 
@@ -28,8 +28,32 @@ knitr::opts_chunk$set(echo = TRUE)
 
 4. Como método de análise, será utilizado regressão linear múltipla onde a VR é a renda per capita e as variáveis explicativas são as 5 escolhidas no passo 2.
 
-```{RDPC_municipio <- read_excel("~/GitHub/PosUnisinosEstatisticaAplicada/RendaPerCapta/atlas2013_municipio.xlsx")}
-View(RDPC_municipio)
+```{r dadosrs}
+
+library(readxl)
+dadosbrutos <- read_excel("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosEstatisticaAplicada/RendaPerCapta/atlas2013_municipios.xlsx")
+
+library(readr)
+library(dplyr)
+library(stringr)
+
+dadosrs <-
+  filter(
+    select(
+      subset.data.frame(dadosbrutos, UF == 43),
+      ANO,
+      UF,
+      MUNICIPIO,
+      RDPC,
+      IDHM,
+      ESPVIDA,
+      GINI,
+      PESOURB
+    ),
+    MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL", "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA")
+  )
+
+View(dadosrs)
 ```
 
 ## Including Plots
