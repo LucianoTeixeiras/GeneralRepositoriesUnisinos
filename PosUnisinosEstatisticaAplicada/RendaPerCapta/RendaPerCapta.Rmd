@@ -6,7 +6,11 @@ date: "4 de junho de 2018"
 output:
   word_document: default
   html_document: default
-  pdf_document: default
+  pdf_document: 
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -15,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introdução da Análise
 
-1. O arquivo utilizado, se refere aos dados municipais do Atlas do desenvolvimento humano no Brasil referentes aos Censos 2000 e 2010 em http://www.atlasbrasil.org.br/2013/pt/download/
+1. O arquivo utilizado, se refere aos dados municipais do Atlas do desenvolvimento humano no Brasil referentes aos Censos de 1991, 2000 e 2010 em http://www.atlasbrasil.org.br/2013/pt/download/.
 
 2. Foram escolhidas 5 variáveis explicativas para a renda per capita dos municípios.
   1. Var1
@@ -24,18 +28,18 @@ knitr::opts_chunk$set(echo = TRUE)
   4. Var4
   5. Var5
 
-3. A amostra será demonstrada por meio de uma análise descritiva das variáveis e da renda per capita.
+3. A amostra será demonstrada por meio de uma análise descritiva das variáveis em relação à renda per capita.
 
 4. Como método de análise, será utilizado regressão linear múltipla onde a VR é a renda per capita e as variáveis explicativas são as 5 escolhidas no passo 2.
 
 ```{r dadosrs}
 
 library(readxl)
-dadosbrutos <- read_excel("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosEstatisticaAplicada/RendaPerCapta/atlas2013_municipios.xlsx")
-
 library(readr)
 library(dplyr)
 library(stringr)
+
+dadosbrutos <- read_excel("atlas2013_municipios.xlsx")
 
 dadosrs <-
   filter(
@@ -50,10 +54,11 @@ dadosrs <-
       GINI,
       PESOURB
     ),
-    MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL", "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA")
+    MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL",
+                     "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA")
   )
 
-View(dadosrs)
+head(dadosrs)
 ```
 
 ## Including Plots

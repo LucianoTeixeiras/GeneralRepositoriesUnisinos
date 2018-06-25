@@ -80,7 +80,7 @@ dadosrs <- filter( select( subset.data.frame(dadosbrutos, UF == 43), ANO, UF, Mu
 
 head(dadosrs)
 
-View(dadosrs)
+head(dadosrs)
 
 
 reg <- ml(dadosrs)
