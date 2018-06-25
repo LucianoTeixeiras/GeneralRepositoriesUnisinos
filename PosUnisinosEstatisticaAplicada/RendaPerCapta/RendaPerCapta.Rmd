@@ -4,13 +4,13 @@ subtitle: "Região Metropolitana de Porto Alegre"
 author: "Luciano Teixeira"
 date: "4 de junho de 2018"
 output:
-  word_document: default
-  html_document: default
   pdf_document: 
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}

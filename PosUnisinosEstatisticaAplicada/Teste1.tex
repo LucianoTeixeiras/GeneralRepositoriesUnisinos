@@ -24,7 +24,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
-            pdftitle={A Renda per capita de Municípios Gaúchos},
+            pdftitle={Teste},
             pdfauthor={Luciano Teixeira},
             pdfborder={0 0 0},
             breaklinks=true}
@@ -87,7 +87,7 @@
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{0}
 % Redefines (sub)paragraphs to behave more like sections
 \ifx\paragraph\undefined\else
 \let\oldparagraph\paragraph
@@ -114,124 +114,51 @@
 
 \setlength{\droptitle}{-2em}
 
-  \title{A Renda per capita de Municípios Gaúchos}
+  \title{Teste}
     \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
-  \subtitle{Região Metropolitana de Porto Alegre}
-  \author{Luciano Teixeira}
+    \author{Luciano Teixeira}
     \preauthor{\centering\large\emph}
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{4 de junho de 2018}
+    \date{24 de junho de 2018}
 
 
 \begin{document}
 \maketitle
 
-{
-\setcounter{tocdepth}{2}
-\tableofcontents
-}
-\subsection{Introdução da Análise}\label{introducao-da-analise}
+\subsection{R Markdown}\label{r-markdown}
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  O arquivo utilizado, se refere aos dados municipais do Atlas do
-  desenvolvimento humano no Brasil referentes aos Censos de 1991, 2000 e
-  2010 em \url{http://www.atlasbrasil.org.br/2013/pt/download/}.
-\item
-  Foram escolhidas 5 variáveis explicativas para a renda per capita dos
-  municípios.
-\item
-  Var1
-\item
-  Var2
-\item
-  Var3
-\item
-  Var4
-\item
-  Var5
-\item
-  A amostra será demonstrada por meio de uma análise descritiva das
-  variáveis em relação à renda per capita.
-\item
-  Como método de análise, será utilizado regressão linear múltipla onde
-  a VR é a renda per capita e as variáveis explicativas são as 5
-  escolhidas no passo 2.
-\end{enumerate}
+This is an R Markdown document. Markdown is a simple formatting syntax
+for authoring HTML, PDF, and MS Word documents. For more details on
+using R Markdown see \url{http://rmarkdown.rstudio.com}.
+
+When you click the \textbf{Knit} button a document will be generated
+that includes both content as well as the output of any embedded R code
+chunks within the document. You can embed an R code chunk like this:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(readxl)}
-\KeywordTok{library}\NormalTok{(readr)}
-\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{summary}\NormalTok{(cars)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## 
-## Attaching package: 'dplyr'
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(stringr)}
-
-\NormalTok{dadosbrutos <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"atlas2013_municipios.xlsx"}\NormalTok{)}
-
-\NormalTok{dadosrs <-}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(}
-    \KeywordTok{select}\NormalTok{(}
-      \KeywordTok{subset.data.frame}\NormalTok{(dadosbrutos, UF }\OperatorTok{==}\StringTok{ }\DecValTok{43}\NormalTok{),}
-\NormalTok{      ANO,}
-\NormalTok{      UF,}
-\NormalTok{      MUNICIPIO,}
-\NormalTok{      RDPC,}
-\NormalTok{      IDHM,}
-\NormalTok{      ESPVIDA,}
-\NormalTok{      GINI,}
-\NormalTok{      PESOURB}
-\NormalTok{    ),}
-\NormalTok{    MUNICIPIO }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"NOVO HAMBURGO"}\NormalTok{, }\StringTok{"SÃO LEOPOLDO"}\NormalTok{, }\StringTok{"SAPUCAIA DO SUL"}\NormalTok{,}
-                     \StringTok{"ESTEIO"}\NormalTok{, }\StringTok{"CANOAS"}\NormalTok{, }\StringTok{"PORTO ALEGRE"}\NormalTok{, }\StringTok{"GUAÍBA"}\NormalTok{)}
-\NormalTok{  )}
-
-\KeywordTok{head}\NormalTok{(dadosrs)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 6 x 8
-##     ANO    UF MUNICIPIO      RDPC  IDHM ESPVIDA  GINI PESOURB
-##   <dbl> <dbl> <chr>         <dbl> <dbl>   <dbl> <dbl>   <dbl>
-## 1  1991    43 CANOAS         522. 0.556    69.0 0.5    269258
-## 2  1991    43 ESTEIO         535. 0.589    69.5 0.48    70468
-## 3  1991    43 GUAÍBA         402. 0.522    70.0 0.48    72731
-## 4  1991    43 NOVO HAMBURGO  614. 0.544    68.9 0.53   201502
-## 5  1991    43 PORTO ALEGRE  1022. 0.66     69.9 0.570 1236024
-## 6  1991    43 SÃO LEOPOLDO   565. 0.543    67.9 0.55   160358
+##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00
 \end{verbatim}
 
 \subsection{Including Plots}\label{including-plots}
 
 You can also embed plots, for example:
 
-\includegraphics{RendaPerCapta_files/figure-latex/pressure-1.pdf}
+\includegraphics{Teste1_files/figure-latex/pressure-1.pdf}
 
 Note that the \texttt{echo\ =\ FALSE} parameter was added to the code
 chunk to prevent printing of the R code that generated the plot.
