@@ -88,3 +88,5 @@ reg <- ml(dadosrs)
 
 
 step(lm(RDPC~IDHM+ESPVIDA+GINI+PESOURB,data=dadosrs),direction="both")
+
+step(lm(RDPC~IDHM+ESPVIDA+GINI+PESOURB,data=dadosrs),direction="backward")
