@@ -7,7 +7,7 @@ library(dplyr)
 
 # Definição da Workspace no repositório local Gi/GotHub
 
-setwd("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosEstatisticaAplicada/RendaPerCapta")
+setwd("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosEstatisticaAplicada/RendaPerCapta_v3.0")
 
 # Leitura do Arquivo da Base Principal
 
