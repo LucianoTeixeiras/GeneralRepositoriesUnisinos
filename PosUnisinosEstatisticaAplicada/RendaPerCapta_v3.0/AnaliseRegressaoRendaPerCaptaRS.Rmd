@@ -28,18 +28,26 @@ knitr::opts_chunk$set(echo = TRUE)
   4. Var4
   5. Var5
 
-3. A amostra será demonstrada por meio de uma análise descritiva das variáveis em relação à renda per capita.
+3. A amostra será demonstrada por meio de uma análise descritiva des variáveis explicaivas em relação à evolução da renda per capita dos municípios da região metropolitana de Porto Alegre sobre os anos de 1991, 2000 e 2010.
 
 4. Como método de análise, será utilizado regressão linear múltipla onde a VR é a renda per capita e as variáveis explicativas são as 5 escolhidas no passo 2.
 
-```{r dadosrs}
+5. Como primeiro passo, serão carregadas a seguintes bibliotecas. Caso estas nãi se encontrem instaladas, é necessário que esta instalação seja eetuada.
 
-library(readxl)
+```{r bibliotecas, echo=FALSE}
+
 library(readr)
 library(dplyr)
+library(readxl)
+```
+
+
+```{r dadosbrutos}
 
 dadosbrutos <- read_excel("atlas2013_municipios.xlsx")
+```
 
+```{r dadosrs}
 dadosrs <-
   filter(
     select(

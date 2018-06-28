@@ -1,18 +1,17 @@
 # Pacotes extras para facilitar a modelagem dos dados
 
+# Antes até mesmo da carga dos dados, é improtante carregar ou mesmo até instalas alguns pacotes primordiais para leitura e modelagem dos dados a serem analisados.
+
 install.packages("readr")
 install.packages("dplyr")
+install.packages("readxl")
 library(readr)
 library(dplyr)
-
-# Definição da Workspace no repositório local Gi/GotHub
-
-setwd("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosEstatisticaAplicada/RendaPerCapta_v3.0")
+library(readxl)
 
 # Leitura do Arquivo da Base Principal
 
-library(readxl)
-dadosbrutos <- read_excel("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosEstatisticaAplicada/RendaPerCapta/atlas2013_municipios.xlsx")
+dadosbrutos <- read_excel("atlas2013_municipios.xlsx")
 
 # Escolha dos Estado do Rio Grande do Sul para seleção dos municipios a serem analisados
 
