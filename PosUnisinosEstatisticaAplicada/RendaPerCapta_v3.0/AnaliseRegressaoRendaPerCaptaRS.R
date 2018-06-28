@@ -5,9 +5,15 @@
 install.packages("readr")
 install.packages("dplyr")
 install.packages("readxl")
+install.packages("ggplot2",dep=TRUE)
+install.packages("stringi")
+install.packages("stringr")
 library(readr)
 library(dplyr)
 library(readxl)
+library(ggplot2)
+library(stringi)
+library(stringr)
 
 # Leitura do Arquivo da Base Principal
 

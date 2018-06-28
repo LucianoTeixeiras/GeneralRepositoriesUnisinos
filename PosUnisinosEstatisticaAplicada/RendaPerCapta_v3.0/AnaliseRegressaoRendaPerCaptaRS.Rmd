@@ -4,12 +4,12 @@ subtitle: "Região Metropolitana de Porto Alegre"
 author: "Luciano Teixeira"
 date: "4 de junho de 2018"
 output:
+  word_document: default
   pdf_document: 
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
     toc: yes
-  word_document: default
   html_document: default
 ---
 
@@ -34,11 +34,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 5. Como primeiro passo, serão carregadas a seguintes bibliotecas. Caso estas nãi se encontrem instaladas, é necessário que esta instalação seja eetuada.
 
-```{r bibliotecas, echo=FALSE}
+```{r bibliotecas}
 
 library(readr)
 library(dplyr)
 library(readxl)
+library(ggplot2)
 ```
 
 
