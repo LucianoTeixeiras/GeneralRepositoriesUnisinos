@@ -1,0 +1,99 @@
+---
+title: "A Renda per capita de Municípios Gaúchos"
+subtitle: "Região Metropolitana de Porto Alegre"
+author: "Luciano Teixeira"
+date: "30 de junho de 2018"
+output:
+  pdf_document: 
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introdução da Análise
+
+O arquivo utilizado, se refere aos dados municipais do Atlas do desenvolvimento humano no Brasil referentes aos Censos de 1991, 2000 e 2010 em http://www.atlasbrasil.org.br/2013/pt/download/.
+
+Foram escolhidas 5 variáveis explicativas para a renda per capita dos municípios.
+
+* IDHM: Índice de Desenvolvimento Humano Municipal
+* ESPVIDA:  Esperança de vida ao nascer
+* GINI: Índice de Gini
+* PESOURB:  População residente na área urbana
+* T_FBSUPER:  Taxa de frequência bruta ao ensino   superior
+
+A amostra será demonstrada por meio de uma análise descritiva des variáveis explicaivas em relação à evolução da renda per capita dos municípios da região metropolitana de Porto Alegre sobre os anos de 1991, 2000 e 2010.
+
+Como método de análise, será utilizado regressão linear múltipla onde a VR é a renda per capita e as variáveis explicativas são as 5 escolhidas no passo 2.
+
+# Inicializando Bibliotecas
+
+Como primeiro passo, serão carregadas a seguintes bibliotecas. Caso estas não se encontrem instaladas, é necessário que esta instalação seja eetuada.
+
+
+```{r bibliotecas}
+
+library(readr)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(stringi)
+library(stringr)
+
+```
+
+# Importando Dados Brutos
+
+```{r dadosbrutos}
+
+dadosbrutos <- read_excel("atlas2013_municipios.xlsx")
+
+```
+
+# Especificando os Dados
+
+Comandos Encadeados podem demonstrar um principio de Machine Learning, segregando cidades, Estado e Região. No caso deste modelo, oi delimitado a Região Metropolitana de Porto Alegre, podendo ser aplicado em qualquer 
+estado, macro região ou micro região, com pequenos ajustes.
+
+Este encadeameno de funçoes, substiui uma série de passos, utilizados anteriormente para chegar à um resultado
+muito mais enchuto, levando em consideração proficionais de analise de dados com poucos recursos em questão de
+equipamenos, como por exemplos computadores de pequeno porte, pouca memória e processador limitado.
+
+```{r dadosrs}
+
+dadosrs <-
+  filter(
+    select(
+      subset.data.frame(dadosbrutos, UF == 43),
+      ANO,
+      UF,
+      MUNICIPIO,
+      RDPC,
+      IDHM,
+      ESPVIDA,
+      GINI,
+      PESOURB,
+      T_FBSUPER
+    ),
+    MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL",
+                     "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA")
+  )
+
+```
+
+# Listando os Dados
+
+```{r ldadosrs}
+
+head(dadosrs)
+
+```
+
+Total de `r nrow(dadosrs)` registros.
