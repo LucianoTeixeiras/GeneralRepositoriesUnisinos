@@ -73,7 +73,8 @@ dadosrs <-
       IDHM,
       ESPVIDA,
       GINI,
-      PESOURB
+      PESOURB,
+      T_FBSUPER
     ),
     MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL", "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA")
   )
