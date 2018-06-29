@@ -4,7 +4,7 @@ subtitle: "Região Metropolitana de Porto Alegre"
 author: "Luciano Teixeira"
 date: "30 de junho de 2018"
 output:
-  pdf_document: 
+  pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: yes
@@ -13,29 +13,29 @@ output:
   html_document: default
 ---
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
 # Introdução da Análise
 
-O arquivo utilizado, se refere aos dados municipais do Atlas do desenvolvimento humano no Brasil referentes aos Censos de 1991, 2000 e 2010 em http://www.atlasbrasil.org.br/2013/pt/download/.
+  O arquivo utilizado, se refere aos dados municipais do Atlas do desenvolvimento humano no Brasil referentes aos Censos de 1991, 2000 e 2010 em http://www.atlasbrasil.org.br/2013/pt/download/.
 
-Foram escolhidas 5 variáveis explicativas para a renda per capita dos municípios.
+  Foram escolhidas 5 variáveis explicativas para a renda per capita dos municípios.
 
-* IDHM: Índice de Desenvolvimento Humano Municipal
-* ESPVIDA:  Esperança de vida ao nascer
-* GINI: Índice de Gini
-* PESOURB:  População residente na área urbana
-* T_FBSUPER:  Taxa de frequência bruta ao ensino   superior
+    * IDHM: Índice de Desenvolvimento Humano Municipal
+    * ESPVIDA:  Esperança de vida ao nascer
+    * GINI: Índice de Gini
+    * PESOURB:  População residente na área urbana
+    * T_FBSUPER:  Taxa de frequência bruta ao ensino   superior
 
-A amostra será demonstrada por meio de uma análise descritiva des variáveis explicaivas em relação à evolução da renda per capita dos municípios da região metropolitana de Porto Alegre sobre os anos de 1991, 2000 e 2010.
+  A amostra será demonstrada por meio de uma análise descritiva des variáveis explicaivas em relação à evolução da renda per capita dos municípios da região metropolitana de Porto Alegre sobre os anos de 1991, 2000 e 2010.
 
-Como método de análise, será utilizado regressão linear múltipla onde a VR é a renda per capita e as variáveis explicativas são as 5 escolhidas no passo 2.
+  Como método de análise, será utilizado regressão linear múltipla onde a VR é a renda per capita e as variáveis explicativas são as 5 escolhidas no passo 2.
 
 # Inicializando Bibliotecas
 
-Como primeiro passo, serão carregadas a seguintes bibliotecas. Caso estas não se encontrem instaladas, é necessário que esta instalação seja eetuada.
+  Como primeiro passo, serão carregadas a seguintes bibliotecas. Caso estas não se encontrem instaladas, é necessário que esta instalação seja eetuada.
 
 
 ```{r bibliotecas}
@@ -46,6 +46,7 @@ library(readxl)
 library(ggplot2)
 library(stringi)
 library(stringr)
+library(car)
 
 ```
 
@@ -59,12 +60,9 @@ dadosbrutos <- read_excel("atlas2013_municipios.xlsx")
 
 # Especificando os Dados
 
-Comandos Encadeados podem demonstrar um principio de Machine Learning, segregando cidades, Estado e Região. No caso deste modelo, oi delimitado a Região Metropolitana de Porto Alegre, podendo ser aplicado em qualquer 
-estado, macro região ou micro região, com pequenos ajustes.
+  Comandos Encadeados podem demonstrar um principio de Machine Learning, segregando cidades, Estado e Região. No caso deste modelo, oi delimitado a Região Metropolitana de Porto Alegre, podendo ser aplicado em qualquer estado, macro região ou micro região, com pequenos ajustes.
 
-Este encadeameno de funçoes, substiui uma série de passos, utilizados anteriormente para chegar à um resultado
-muito mais enchuto, levando em consideração proficionais de analise de dados com poucos recursos em questão de
-equipamenos, como por exemplos computadores de pequeno porte, pouca memória e processador limitado.
+  Este encadeameno de funçoes, substiui uma série de passos, utilizados anteriormente para chegar à um resultado muito mais enchuto, levando em consideração proficionais de analise de dados com poucos recursos em questão de equipamenos, como por exemplos computadores de pequeno porte, pouca memória e processador limitado.
 
 ```{r dadosrs}
 
@@ -97,3 +95,133 @@ head(dadosrs)
 ```
 
 Total de `r nrow(dadosrs)` registros.
+
+# Sumário de variáveis
+
+```{r summary}
+
+summary(dadosrs)
+
+```
+
+# Aplicando a regressao multipla
+
+```{r regressao}
+
+reg <- lm(RDPC ~ IDHM + ESPVIDA + GINI + PESOURB + T_FBSUPER, data = dadosrs)
+
+```
+
+# Teste a significância global do modelo de regressão.
+
+```{r reg}
+
+summary(reg)
+
+```
+
+# Determine os ICs a 95% para os parâmetros do modelo.
+
+```{r}
+
+confint(reg)
+
+```
+
+# Distribuição dos resíduos
+
+  A variação dos resíduos aparenta diminuir para os valores mais altos. No entanto existem poucos dados.
+
+```{r residuos}
+
+plot(reg, which = 1)
+
+```
+
+# Normalidade dos resíduos
+
+  O teste de Shapiro não indicia a rejeição da hipótese nula, de normalidade dos resíduos.
+
+  O gráfico qqplot apresenta alguns desvios.
+
+```{r desvios}
+
+plot(reg, which = 2)
+
+```
+
+# Teste de Shapiro
+
+```{r shapiro}
+
+shapiro.test(reg$residuals)
+
+```
+
+# Deteção de valores alvanca e significativos
+
+  A observação 9 tem distância de Cook superior a 0.5. Existe uma observação com hat value próximo do valor do máximo (hat_thresh).
+
+```{r plo1}
+
+plot(reg, which = 5)
+
+```
+
+# Outliers
+
+  Foi detetado nenhum outlier
+
+```{r outliers}
+
+which(rstudent(reg) > 2)
+
+```
+
+# Multicolinearidade
+
+  Não foram detetados valores superiores a 5, que indiciem associação muito forte entre variáveis explicativas.
+
+```{r vif}
+
+vif(reg)
+
+```
+
+# Predição
+
+  Determine uma estimativa para o consumo médio de energia quando a temperatura média ambiental é 75ºF, o número de dias do mês é 24, a pureza média do produto é 90 e o número de toneladas de produto produzido é 98. Obtenha um IC a 95% para o valor Interval = “confidence”, porque quero estimar o consumo médio da população e não o consumo da população (interval = “predict”).
+
+predict(lm1, list(temperatura = 75, dias = 24, pureza = 90, producao = 98),
+        interval = "conf")
+
+# Método Stepwise
+
+  Filtragem automática pelos métodos “stepwise”, “backward” e “forward” e comparação de resultados.
+
+  O método indica que a variável producao poderá ser retirada do modelo sem perda de qualidade.
+
+```{r}
+
+step(reg, direction = "both")
+
+```
+
+# Método Backward
+
+  As conclusões são semelhantes ao método stepwise
+
+```{r}
+
+step(reg, direction = "backward")
+
+```
+
+# Teste F para comparar a qualidade dos modelos com e sem a variável produção.
+
+  Criação de modelo atualizado, sem a variável produção.
+
+  Os parâmetros das variáveis \( dias \) e \( pureza \) continuam a não ter significado estatístico, pelo que se considera que deveriam ser retiradas da análise num caso real.
+
+lm2 <- update(lm1, ~. - producao)
+summary(lm2)
