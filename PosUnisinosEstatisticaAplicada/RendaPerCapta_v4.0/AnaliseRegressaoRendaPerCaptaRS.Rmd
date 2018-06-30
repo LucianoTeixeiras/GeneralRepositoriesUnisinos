@@ -96,7 +96,7 @@ head(dadosrs)
 
 Total de `r nrow(dadosrs)` registros.
 
-# Sumário de variáveis
+# Sumário de Variáveis
 
 ```{r summary}
 
