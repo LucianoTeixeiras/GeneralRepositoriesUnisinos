@@ -1,8 +1,8 @@
 ---
-title: "A Renda per capita de Municípios Gaúchos"
-subtitle: "Região Metropolitana de Porto Alegre"
+title: "Renda per capita Metropolitana - Porto Alegre - RS"
+subtitle: "Pós-Graduação Lato Senso - Big Data, Data Science e Data Analytics"
 author: "Luciano Teixeira"
-date: "30 de junho de 2018"
+date: "`r format(Sys.time(), '%d/%B/%Y')`"
 output:
   pdf_document:
     fig_caption: yes
@@ -151,7 +151,7 @@ summary(dadosrs_2010)
 ```
 # Segregando os Dados em Relação a Variavel Y = RDPC
 
-```{r}
+```{r segregados}
 
 Y_RDPC_2010 <- c(dadosrs_2010$RDPC)
 
@@ -159,7 +159,7 @@ Y_RDPC_2010 <- c(dadosrs_2010$RDPC)
 
 # Inserindo os dados de 2010 na base de 2000
 
-```{r}
+```{r insert}
 
 dadosrs<- data.frame(dadosrs,Y_RDPC_2010)
 
@@ -167,7 +167,7 @@ dadosrs<- data.frame(dadosrs,Y_RDPC_2010)
 
 # Sumário de variáveis
 
-```{r}
+```{r sumario_insert}
 
 summary(dadosrs)
 
@@ -189,13 +189,13 @@ hist(dadosrs$Y_RDPC_2010, xlab = "RDPC", main = "HIST RDPC 2010")
 # Análise de correlação linear entre duas variáveis quantitativas
 
 
-```{r correlacao}
+```{r correlacao_plot}
 
 plot(dadosrs$GINI,dadosrs$ESPVIDA)
 
 ```
 
-```{r}
+```{r correlacao}
 
 cor(dadosrs$GINI,dadosrs$ESPVIDA)
 
@@ -262,18 +262,29 @@ which(rstudent(reg) > 2)
 ```
 
 # Multicolinearidade
+  
+  Multicolinearidade consiste em um problema comum em regressões, no qual as variáveis independentes possuem relações lineares exatas ou aproximadamente exatas.
+
+## Multicolinearidade 01
+
+```{r multicolinearidade01}
+
+attach(dadosrs)
+
+pairs(dadosrs[,c(4:10)])
+
+pairs(dadosrs[,c(4,4:10)])
+
+round(cor(dadosrs[,c(4:10)]),3)
+
+```
+
+## Multicolinearidade 02
 
   Foram detetados valores superiores a 5, que indicam associação muito fraca entre variáveis explicativas.
 
-```{r multicolinearidade}
+```{r multicolinearidade02}
 
 vif(reg)
 
 ```
-
-# Predição
-
-  Determine uma estimativa para o consumo médio de energia quando a temperatura média ambiental é 75ºF, o número de dias do mês é 24, a pureza média do produto é 90 e o número de toneladas de produto produzido é 98. Obtenha um IC a 95% para o valor Interval = “confidence”, porque quero estimar o consumo médio da população e não o consumo da população (interval = “predict”).
-
-predict(lm1, list(temperatura = 75, dias = 24, pureza = 90, producao = 98),
-        interval = "conf")

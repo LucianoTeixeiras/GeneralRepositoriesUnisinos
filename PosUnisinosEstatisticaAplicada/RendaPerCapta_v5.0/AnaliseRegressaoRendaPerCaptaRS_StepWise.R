@@ -99,6 +99,7 @@ cor(dadosrs$GINI,dadosrs$ESPVIDA)
 # Aplicando a regressao multipla
 
 reg <- lm(RDPC ~ IDHM + ESPVIDA + GINI + PESOURB + T_FBSUPER, data = dadosrs)
+reg <- lm(RDPC ~ IDHM + PESOURB + T_FBSUPER, data = dadosrs)
 
 # Teste a significância global do modelo de regressão.
 
@@ -184,3 +185,10 @@ summary(lm2)
 # Os modelos são semelhantes escolhendo-se, portanto, o modelo mais simples, pelo princípio da parcimónia.
 
 anova(lm2, lm1)
+
+
+
+
+
+
+format(Sys.time(), '%d/%B/%Y %H:%M')
