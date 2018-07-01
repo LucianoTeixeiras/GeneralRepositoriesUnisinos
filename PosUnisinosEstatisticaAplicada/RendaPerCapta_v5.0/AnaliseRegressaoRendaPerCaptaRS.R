@@ -22,35 +22,6 @@ dadosrs <- subset.data.frame(dadosbrutos, UF==43)
 
 head(dadosrs)
 
-# Divisao da Base do RS por ano
-
-dadosrs_1991 <- subset.data.frame(dadosrs, ANO==1991)
-dadosrs_2000 <- subset.data.frame(dadosrs, ANO==2000)
-dadosrs_2010 <- subset.data.frame(dadosrs, ANO==2010)
-
-teste <- select(dadosrs_1991, ANO, UF, Município)
-
-teste
-
-# Escolha dos Municipios a serem analisados
-
-SPC<-(subset.data.frame(dadosrs_1991, Município==c("SAPUCAIA DO SUL","CANOAS")))
-ETPA<-(subset.data.frame(dadosrs_1991, Município==c("ESTEIO","PORTO ALEGRE")))
-
-View(SPCS)
-View(ETPA)
-
-dadosMunicipiosRS_1991 <- subset.data.frame(dadosrs_1991, Município==c("SAPUCAIA DO SUL", "ESTEIO", "CANOAS"))
-
-View(dadosMunicipiosRS_1991)
-
-# Limpando Dados
-
-dadosrs1 <- str_replace(dadosrs, "\\Município", "MUNICIPIO")
-
-View(dadosrs1)
-
-
 # Comandos Encadeados para demonstrar um principio de Machine Learning, segregando cidades por Estado e Região,
 # no caso deste modelo, a Região Metropolitana de Porto Alegre. Este modelo poderar ser aplicado em qualquer 
 # estado, macro região ou micro região, com pequenos ajustes.
@@ -58,7 +29,7 @@ View(dadosrs1)
 # muito mais enchuto, levando em consideração proficionais de analise de dados com poucos recursos em questão de
 # equipamenos, como por exemplos computadores de pequeno porte e com pouca memória e processador limitado.
 
-# Comando Formatado
+# Especificação do Ano de 2000
 dadosrs <-
   filter(
     select(
@@ -73,14 +44,63 @@ dadosrs <-
       PESOURB,
       T_FBSUPER
     ),
-    MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL", "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA")
+    MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL", "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA", ""),
+    ANO == 2000
   )
 
 head(dadosrs)
 
+# Especificação do Ano de 2010
+dadosrs_2010 <-
+  filter(
+    select(
+      subset.data.frame(dadosbrutos, UF == 43),
+      ANO,
+      UF,
+      MUNICIPIO,
+      RDPC,
+      IDHM,
+      ESPVIDA,
+      GINI,
+      PESOURB,
+      T_FBSUPER
+    ),
+    MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL", "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA", ""),
+    ANO == 2010
+  )
+
+head(dadosrs_2010)
+
+dadosrs_2010
+
+# Segregando os Dados em Relação a Variavel Y = RDPC
+
+Y_RDPC_2010 <- c(dadosrs_2010$RDPC)
+
+# Inserindo os dados de 2010 na base de 2000
+
+dadosrs<- data.frame(dadosrs,Y_RDPC_2010)
+
+dadosrs
+
 # Sumário de variáveis
 
 summary(dadosrs)
+
+# Histogramas
+
+par(mfrow = c(2,2))
+
+hist(dadosrs$RDPC, xlab = "RDPC", main = "HIST RDPC")
+hist(dadosrs$IDHM, xlab = "IDHM", main = "HIST IDHM")
+hist(dadosrs$GINI, xlab = "GINI", main = "HIST GINI")
+hist(dadosrs$Y_RDPC_2010, xlab = "RDPC", main = "HIST RDPC 2010")
+
+# Análise de correlação linear entre duas variáveis quantitativas
+
+plot(dadosrs$GINI,dadosrs$ESPVIDA)
+
+cor(dadosrs$GINI,dadosrs$ESPVIDA)
 
 # Aplicando a regressao multipla
 
@@ -90,36 +110,28 @@ reg <- lm(RDPC ~ IDHM + ESPVIDA + GINI + PESOURB + T_FBSUPER, data = dadosrs)
 
 summary(reg)
 
-# Determine os ICs a 95% para os parâmetros do modelo.
+# Intervalos de confiança para os coeficientes da equação.
 
 confint(reg)
 
-# Distribuição dos resíduos
-#A variação dos resíduos aparenta diminuir para os valores mais altos. No entanto existem poucos dados.
+# Resíduos
 
-plot(reg, which = 1)
+plot(fitted(reg),residuals(reg),xlab="Valores Ajustados",ylab="Resíduos")
+abline(h=0)
 
-#Normalidade dos resíduos
+plot(dadosrs$GINI,residuals(reg),xlab="GINI",ylab="Resíduos")
+abline(h=0)
 
-#O teste de Shapiro não indicia a rejeição da hipótese nula, de normalidade dos resíduos.
-
-#O gráfico qqplot apresenta alguns desvios.
-
-plot(reg, which = 2)
+plot(dadosrs$ESPVIDA,residuals(reg),xlab="ESPVIDA",ylab="Resíduos")
+abline(h=0)
 
 # Teste de Shapiro
 
 shapiro.test(reg$residuals)
 
-# Deteção de valores alvanca e significativos
-
-# A observação 9 tem distância de Cook superior a 0.5. Existe uma observação com hat value próximo do valor do máximo (hat_thresh).
-
-plot(reg, which = 5)
-
 # Outliers
 
-# Foi detetado nenhum outlier
+# Não foi detetado nenhum outliers.
 
 which(rstudent(reg) > 2)
 
@@ -135,7 +147,7 @@ vif(reg)
 
 # Interval = “confidence”, porque quero estimar o consumo médio da população e não o consumo da população (interval = “predict”).
 
-predict(lm1, list(temperatura = 75, dias = 24, pureza = 90, producao = 98),
+predict(reg, list(temperatura = 75, dias = 24, pureza = 90, producao = 98),
         interval = "conf")
 
 

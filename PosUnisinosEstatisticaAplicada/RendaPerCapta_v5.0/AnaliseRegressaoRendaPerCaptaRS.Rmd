@@ -27,7 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
     * ESPVIDA:  Esperança de vida ao nascer
     * GINI: Índice de Gini
     * PESOURB:  População residente na área urbana
-    * T_FBSUPER:  Taxa de frequência bruta ao ensino   superior
+    * T_FBSUPER:  Taxa de frequência bruta ao ensino superior
 
   A amostra será demonstrada por meio de uma análise descritiva des variáveis explicaivas em relação à evolução da renda per capita dos municípios da região metropolitana de Porto Alegre sobre os anos de 1991, 2000 e 2010.
 
@@ -64,7 +64,9 @@ dadosbrutos <- read_excel("atlas2013_municipios.xlsx")
 
   Este encadeameno de funçoes, substiui uma série de passos, utilizados anteriormente para chegar à um resultado muito mais enchuto, levando em consideração proficionais de analise de dados com poucos recursos em questão de equipamenos, como por exemplos computadores de pequeno porte, pouca memória e processador limitado.
 
-```{r dadosrs}
+## Dados de 2000
+
+```{r dadosrs_2000}
 
 dadosrs <-
   filter(
@@ -81,14 +83,15 @@ dadosrs <-
       T_FBSUPER
     ),
     MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL",
-                     "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA")
+                     "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA"),
+    ANO == 2000
   )
 
 ```
 
-# Listando os Dados
+## Listando os Dados de 2000
 
-```{r ldadosrs}
+```{r ldadosrs_2000}
 
 head(dadosrs)
 
@@ -96,7 +99,7 @@ head(dadosrs)
 
 Total de `r nrow(dadosrs)` registros.
 
-# Sumário de Variáveis
+## Sumário do Dados de 2000
 
 ```{r summary}
 
@@ -104,7 +107,101 @@ summary(dadosrs)
 
 ```
 
-# Aplicando a regressao multipla
+## Dados de 2010
+
+```{r dadosrs_2010}
+
+dadosrs_2010 <-
+  filter(
+    select(
+      subset.data.frame(dadosbrutos, UF == 43),
+      ANO,
+      UF,
+      MUNICIPIO,
+      RDPC,
+      IDHM,
+      ESPVIDA,
+      GINI,
+      PESOURB,
+      T_FBSUPER
+    ),
+    MUNICIPIO %in% c("NOVO HAMBURGO", "SÃO LEOPOLDO", "SAPUCAIA DO SUL",
+                     "ESTEIO", "CANOAS", "PORTO ALEGRE", "GUAÍBA"),
+    ANO == 2010
+  )
+
+```
+
+## Listando os Dados de 2010
+
+```{r ldadosrs_2010}
+
+head(dadosrs_2010)
+
+```
+
+Total de `r nrow(dadosrs_2010)` registros.
+
+## Sumário do Dados de 2010
+
+```{r summary_2010}
+
+summary(dadosrs_2010)
+
+```
+# Segregando os Dados em Relação a Variavel Y = RDPC
+
+```{r}
+
+Y_RDPC_2010 <- c(dadosrs_2010$RDPC)
+
+```
+
+# Inserindo os dados de 2010 na base de 2000
+
+```{r}
+
+dadosrs<- data.frame(dadosrs,Y_RDPC_2010)
+
+```
+
+# Sumário de variáveis
+
+```{r}
+
+summary(dadosrs)
+
+```
+
+# Histogramas
+
+```{r histogramas}
+
+par(mfrow = c(2,2))
+
+hist(dadosrs$RDPC, xlab = "RDPC", main = "HIST RDPC")
+hist(dadosrs$IDHM, xlab = "IDHM", main = "HIST IDHM")
+hist(dadosrs$GINI, xlab = "GINI", main = "HIST GINI")
+hist(dadosrs$Y_RDPC_2010, xlab = "RDPC", main = "HIST RDPC 2010")
+
+```
+
+# Análise de correlação linear entre duas variáveis quantitativas
+
+
+```{r correlacao}
+
+plot(dadosrs$GINI,dadosrs$ESPVIDA)
+
+```
+
+```{r}
+
+cor(dadosrs$GINI,dadosrs$ESPVIDA)
+
+```
+
+# Aplicação da Regressao Multipla
 
 ```{r regressao}
 
@@ -120,33 +217,29 @@ summary(reg)
 
 ```
 
-# Determine os ICs a 95% para os parâmetros do modelo.
+# Intervalos de confiança para os coeficientes da equação.
 
-```{r}
+```{r confiança}
 
 confint(reg)
 
 ```
 
-# Distribuição dos resíduos
-
-  A variação dos resíduos aparenta diminuir para os valores mais altos. No entanto existem poucos dados.
+# Distribuição dos Resíduos
 
 ```{r residuos}
 
-plot(reg, which = 1)
+par(mfrow = c(2,2))
 
-```
+plot(fitted(reg),residuals(reg),xlab="Valores Ajustados",ylab="Resíduos")
+abline(h=0)
 
-# Normalidade dos resíduos
+plot(dadosrs$GINI,residuals(reg),xlab="GINI",ylab="Resíduos")
+abline(h=0)
 
-  O teste de Shapiro não indicia a rejeição da hipótese nula, de normalidade dos resíduos.
+plot(dadosrs$ESPVIDA,residuals(reg),xlab="ESPVIDA",ylab="Resíduos")
+abline(h=0)
 
-  O gráfico qqplot apresenta alguns desvios.
-
-```{r desvios}
-
-plot(reg, which = 2)
 
 ```
 
@@ -158,19 +251,9 @@ shapiro.test(reg$residuals)
 
 ```
 
-# Deteção de valores alvanca e significativos
-
-  A observação 9 tem distância de Cook superior a 0.5. Existe uma observação com hat value próximo do valor do máximo (hat_thresh).
-
-```{r plo1}
-
-plot(reg, which = 5)
-
-```
-
 # Outliers
 
-  Foi detetado nenhum outlier
+  Não foi detetado nenhum outliers.
 
 ```{r outliers}
 
@@ -180,9 +263,9 @@ which(rstudent(reg) > 2)
 
 # Multicolinearidade
 
-  Não foram detetados valores superiores a 5, que indiciem associação muito forte entre variáveis explicativas.
+  Foram detetados valores superiores a 5, que indicam associação muito fraca entre variáveis explicativas.
 
-```{r vif}
+```{r multicolinearidade}
 
 vif(reg)
 
@@ -194,34 +277,3 @@ vif(reg)
 
 predict(lm1, list(temperatura = 75, dias = 24, pureza = 90, producao = 98),
         interval = "conf")
-
-# Método Stepwise
-
-  Filtragem automática pelos métodos “stepwise”, “backward” e “forward” e comparação de resultados.
-
-  O método indica que a variável producao poderá ser retirada do modelo sem perda de qualidade.
-
-```{r}
-
-step(reg, direction = "both")
-
-```
-
-# Método Backward
-
-  As conclusões são semelhantes ao método stepwise
-
-```{r}
-
-step(reg, direction = "backward")
-
-```
-
-# Teste F para comparar a qualidade dos modelos com e sem a variável produção.
-
-  Criação de modelo atualizado, sem a variável produção.
-
-  Os parâmetros das variáveis \( dias \) e \( pureza \) continuam a não ter significado estatístico, pelo que se considera que deveriam ser retiradas da análise num caso real.
-
-lm2 <- update(lm1, ~. - producao)
-summary(lm2)
