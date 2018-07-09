@@ -1,0 +1,297 @@
+---
+title: "Renda per capita Metropolitana - Porto Alegre - RS"
+subtitle: "Pós-Graduação Lato Senso - Big Data, Data Science e Data Analytics"
+author: "Luciano Teixeira"
+date: "`r format(Sys.time(), '%d/%B/%Y')`"
+output:
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Introdução da Análise
+
+  O arquivo utilizado, se refere aos dados municipais do Atlas do desenvolvimento humano no Brasil referentes aos Censos de 1991, 2000 e 2010 em http://www.atlasbrasil.org.br/2013/pt/download/.
+
+  Foram escolhidas 5 variáveis explicativas para a renda per capita dos municípios.
+
+    * IDHM: Índice de Desenvolvimento Humano Municipal
+    * ESPVIDA:  Esperança de vida ao nascer
+    * GINI: Índice de Gini
+    * PESOURB:  População residente na área urbana
+    * T_FBSUPER:  Taxa de frequência bruta ao ensino superior
+
+  A amostra será demonstrada por meio de uma análise descritiva des variáveis explicaivas em relação à evolução da renda per capita dos municípios da região metropolitana de Porto Alegre sobre os anos de 1991, 2000 e 2010.
+
+  Como método de análise, será utilizado regressão linear múltipla onde a VR é a renda per capita e as variáveis explicativas são as 5 escolhidas no passo 2.
+
+# Inicializando Bibliotecas
+
+  Como primeiro passo, serão carregadas a seguintes bibliotecas. Caso estas não se encontrem instaladas, é necessário que esta instalação seja eetuada.
+
+
+```{r bibliotecas}
+
+library(readr)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(stringi)
+library(stringr)
+library(car)
+
+```
+
+# Importando Dados Brutos
+
+```{r dadosbrutos}
+
+dadosbrutos <- read_excel("atlas2013_municipios.xlsx")
+
+```
+
+# Especificando os Dados
+
+  Comandos Encadeados podem demonstrar um principio de Machine Learning, segregando cidades, Estado e Região. No caso deste modelo, oi delimitado a Região Metropolitana de Porto Alegre, podendo ser aplicado em qualquer estado, macro região ou micro região, com pequenos ajustes.
+
+  Este encadeameno de funçoes, substiui uma série de passos, utilizados anteriormente para chegar à um resultado muito mais enchuto, levando em consideração proficionais de analise de dados com poucos recursos em questão de equipamenos, como por exemplos computadores de pequeno porte, pouca memória e processador limitado.
+
+## Dados de 2000
+
+```{r dadosrs_2000}
+
+dadosrs <-
+  filter(
+    select(
+      subset.data.frame(dadosbrutos, UF == 43),
+      ANO,
+      UF,
+      MUNICIPIO,
+      RDPC,
+      IDHM,
+      ESPVIDA,
+      GINI,
+      PESOURB,
+      T_FBSUPER
+    ),
+    MUNICIPIO %in% c("VIAMÃO","TRIUNFO","TAQUARA","LEOPOLDO","SÃO JERÔNIMO",
+                     "SAPUCAIA DO SUL","SAPIRANGA","SANTO ANTÔNIO DA PATRULHA",
+                     "PORTÃO","PORTO ALEGRE","PAROBÉ","HAMBURGO","NOVA SANTA RITA",
+                     "NOVA HARTZ","MONTENEGRO","IVOTI","GUAÍBA","GRAVATAÍ","GLORINHA",
+                     "ESTÂNCIA VELHA","ESTEIO","ELDORADO DO SUL","DOIS IRMÃOS",
+                     "CHARQUEADAS","CAPELA DE SANTANA","CANOAS","CAMPO BOM",
+                     "CACHOEIRINHA","ARROIO DOS RATOS","ARARICÁ","ALVORADA"),
+    ANO == 2000
+  )
+
+```
+
+## Listando os Dados de 2000
+
+```{r ldadosrs_2000}
+
+head(dadosrs)
+
+```
+
+Total de `r nrow(dadosrs)` registros.
+
+## Sumário do Dados de 2000
+
+```{r summary}
+
+summary(dadosrs)
+
+```
+
+## Dados de 2010
+
+```{r dadosrs_2010}
+
+dadosrs_2010 <-
+  filter(
+    select(
+      subset.data.frame(dadosbrutos, UF == 43),
+      ANO,
+      UF,
+      MUNICIPIO,
+      RDPC,
+      IDHM,
+      ESPVIDA,
+      GINI,
+      PESOURB,
+      T_FBSUPER
+    ),
+    MUNICIPIO %in% c("VIAMÃO","TRIUNFO","TAQUARA","LEOPOLDO","SÃO JERÔNIMO",
+                     "SAPUCAIA DO SUL","SAPIRANGA","SANTO ANTÔNIO DA PATRULHA",
+                     "PORTÃO","PORTO ALEGRE","PAROBÉ","HAMBURGO","NOVA SANTA RITA",
+                     "NOVA HARTZ","MONTENEGRO","IVOTI","GUAÍBA","GRAVATAÍ","GLORINHA",
+                     "ESTÂNCIA VELHA","ESTEIO","ELDORADO DO SUL","DOIS IRMÃOS",
+                     "CHARQUEADAS","CAPELA DE SANTANA","CANOAS","CAMPO BOM",
+                     "CACHOEIRINHA","ARROIO DOS RATOS","ARARICÁ","ALVORADA"),
+    ANO == 2010
+  )
+
+```
+
+## Listando os Dados de 2010
+
+```{r ldadosrs_2010}
+
+head(dadosrs_2010)
+
+```
+
+Total de `r nrow(dadosrs_2010)` registros.
+
+## Sumário do Dados de 2010
+
+```{r summary_2010}
+
+summary(dadosrs_2010)
+
+```
+# Segregando os Dados em Relação a Variavel Y = RDPC
+
+```{r segregados}
+
+Y_RDPC_2010 <- c(dadosrs_2010$RDPC)
+
+```
+
+# Inserindo os dados de 2010 na base de 2000
+
+```{r insert}
+
+dadosrs<- data.frame(dadosrs,Y_RDPC_2010)
+
+```
+
+# Sumário de variáveis
+
+```{r sumario_insert}
+
+summary(dadosrs)
+
+```
+
+# Histogramas
+
+```{r histogramas}
+
+par(mfrow = c(2,2))
+
+hist(dadosrs$RDPC, xlab = "RDPC", main = "HIST RDPC")
+hist(dadosrs$IDHM, xlab = "IDHM", main = "HIST IDHM")
+hist(dadosrs$GINI, xlab = "GINI", main = "HIST GINI")
+hist(dadosrs$Y_RDPC_2010, xlab = "RDPC", main = "HIST RDPC 2010")
+
+```
+
+# Análise de correlação linear entre duas variáveis quantitativas
+
+
+```{r correlacao_plot}
+
+plot(dadosrs$GINI,dadosrs$ESPVIDA)
+
+```
+
+```{r correlacao}
+
+cor(dadosrs$GINI,dadosrs$ESPVIDA)
+
+```
+
+# Aplicação da Regressao Multipla
+
+```{r regressao}
+
+reg <- lm(RDPC ~ IDHM + ESPVIDA + GINI + PESOURB + T_FBSUPER, data = dadosrs)
+
+```
+
+# Teste a significância global do modelo de regressão.
+
+```{r reg}
+
+summary(reg)
+
+```
+
+# Intervalos de confiança para os coeficientes da equação.
+
+```{r confiança}
+
+confint(reg)
+
+```
+
+# Distribuição dos Resíduos
+
+```{r residuos}
+
+par(mfrow = c(2,2))
+
+plot(fitted(reg),residuals(reg),xlab="Valores Ajustados",ylab="Resíduos")
+abline(h=0)
+
+plot(dadosrs$GINI,residuals(reg),xlab="GINI",ylab="Resíduos")
+abline(h=0)
+
+plot(dadosrs$ESPVIDA,residuals(reg),xlab="ESPVIDA",ylab="Resíduos")
+abline(h=0)
+
+
+```
+
+# Teste de Shapiro
+
+```{r shapiro}
+
+shapiro.test(reg$residuals)
+
+```
+
+# Outliers
+
+  Não foi detetado nenhum outliers.
+
+```{r outliers}
+
+which(rstudent(reg) > 2)
+
+```
+
+# Multicolinearidade
+  
+  Multicolinearidade consiste em um problema comum em regressões, no qual as variáveis independentes possuem relações lineares exatas ou aproximadamente exatas.
+
+## Multicolinearidade 01
+
+```{r multicolinearidade01}
+
+attach(dadosrs)
+
+pairs(dadosrs[,c(4:10)])
+
+round(cor(dadosrs[,c(4:10)]),3)
+
+```
+
+## Multicolinearidade 02
+
+  Foram detetados valores superiores a 5, que indicam associação muito fraca entre variáveis explicativas.
+
+```{r multicolinearidade02}
+
+vif(reg)
+
+```
