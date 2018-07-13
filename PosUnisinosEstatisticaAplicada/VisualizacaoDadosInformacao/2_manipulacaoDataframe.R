@@ -2,6 +2,8 @@
 
 myData=read.csv('C:/RODRIGO/iris.csv');
 
+myData <- iris
+
 #visualizacao dos nomes dos atributos
 names(myData);
 

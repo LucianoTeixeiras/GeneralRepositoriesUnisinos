@@ -2,6 +2,8 @@
 ### CARREGANDO DADOS
 meu_dado = read.csv('C:\\RODRIGO\\iris.csv')
 
+meu_dado <- iris
+
 library(datasets)
 
 head(airquality)
