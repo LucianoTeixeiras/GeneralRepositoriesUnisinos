@@ -1,0 +1,86 @@
+---
+title: 'Aula 3 - Pacote do R: dplyr'
+author: "Patricia Kuyven"
+date: "06/09/2018"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+
+##  Pacote para manipulação de dados: dplyr
+
+Este é um dos principais pacotes encarregados da tarefa de estruturar os dados. Instale e carregue os pacotes utilizando:
+
+```{r}
+library(dplyr)
+```
+
+
+#### Vamos trabalhar aqui com a base mtcars que já vem no R, que já utilizamos na aula passada. E também com a base de evasão escolar utilizada na disciplina de estatística.
+
+```{r}
+mtcars
+library(readxl)
+dados_evasao <- read_excel("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosIntroducaoPythonR/base_dados_evasao_escolar.xlsx")
+dados_evasao
+```
+
+### Função select
+
+A função select() seleciona colunas (variáveis). É possível utilizar nomes, índices, intervalos de variáveis ou utilizar as funções starts_with(x), contains(x), matches(x), one_of(x) para selecionar as variáveis.
+
+```{r}
+dados_evasao %>%
+  select(Disciplina, 'Modalidade da disciplina', 'Situação final da disciplina')
+```
+
+```{r}
+dados_evasao %>%
+  select(Sexo:'Distância endereço res. do aluno até campus','Situação final da disciplina')
+```
+
+### Função filter
+
+A função filter() filtra/seleciona linhas. 
+
+```{r}
+dados_evasao %>%
+  filter(Disciplina=='Matemática financeira')
+```
+
+Se quiser aplicar as duas funções anteriores, pode ser usado o operador lógico &.
+
+
+```{r}
+dados_evasao %>%
+  select(Disciplina, Sexo, `Situação final da disciplina`) %>%
+  filter(Disciplina=='Matemática financeira')
+```
+
+### Função mutate
+
+A função mutate() cria ou modifica colunas. Ela é equivalente à função transform(), mas aceita várias novas colunas iterativamente. Novas variáveis devem ter o mesmo número de linhas da base original (ou terem comprimento 1).
+
+```{r}
+  mtcars_modif <- mtcars %>%
+    mutate(nova_variavel = mpg * hp)
+mtcars_modif
+```
+
+
+### Função arrange
+
+Esta função ordena a base. Geralmente utilizada com outras funções. Pode ser usado o argumento desc= para colocar em ordem decrescente.
+
+```{r}
+dados_evasao %>%
+  select(Disciplina, Idade) %>%
+  filter(Disciplina == 'Matemática financeira') %>% 
+  arrange(desc(Idade))
+```
+
+
+
+
+

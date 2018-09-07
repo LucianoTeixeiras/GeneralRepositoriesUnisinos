@@ -1,0 +1,118 @@
+---
+title: "Aula 1 - formatação de textos no R Markdown"
+author: "Patricia Kuyven"
+date: "30/08/2018"
+output:
+  word_document: default
+---
+
+# Como formatar texto no R Markdown?
+
+Devemos instalar o pacote `knitr` para poder usar o R Markdown.
+
+
+
+## 1. Itálico
+
+Se quiser usar itálico, deixa a *expressão* entre asteríscos (um no inínio e outro no fim).
+
+## 2. Negrito
+
+Se quiser usar negrito, deixa a **expressão** entre dois asteríscos (dois no inínio e outros dois no fim).
+
+## 3. Lista ordenada
+
+Deve ser escrita com a numeração e uma linha após a outra.
+
+1. primeiro aula;
+2. segunda aula;
+3. terceira lista.
+
+## 4. Lista não ordenada
+
+Deve ser escrita com asterísco ou traço no início de cada item, e uma linha após a outra.
+
+* primeira aula;
+* segunda aula;
+* terceira aula.
+
+## 5. Sublista
+
+Usar 4 espaços após o item.
+
+1. primeiro aula;
+    * item 1
+    * item 2
+    * item final
+2. segunda aula;
+3. terceira lista.
+
+## 6. Incluir links no documento
+
+Deve ser indicado o texto que aponta i link entre colchetes e em seguida coloca o endereço do link entre parênteses. Por exemplo, se digitar: Veja a nossa comunidade `[aqui](https://www.moodle.unisinos.br/course/view.php?id=33025)`.
+
+Resultará em:
+
+Veja a nossa comunidade [aqui](https://www.moodle.unisinos.br/course/view.php?id=33025).
+
+## 7. Fórmulas matemáticas
+
+Utiliza-se o LaTex para incluir fórmulas. Se for em Bloco, use \$$ LaTex \$$, se for na linha use $ Latex $. Por exemplo:
+
+Se digitar `\sqrt{\frac{5}{b}}` dentro dos dois sifrões, resultará em
+
+$$
+\sqrt{\frac{5}{b}}
+$$
+Porém, se digitar `$\sqrt{\frac{5}{b}}$`, o resultado latex: $\sqrt{\frac{5}{b}}$ vai aparecer no meio da linha.
+ 
+
+[Aqui](http://web.ift.uib.no/Teori/KURS/WRK/TeX/symALL.html) tem um link para ver alguns comandos LaTex.
+
+ 
+ 
+## 8.  iInserir magens
+
+Para inserir uma imagem, a sintaxe é a mesma de inserir um link, mas com uma exclamação ! na frente:  `![texto](local_da_imagem)`.
+
+Por exemplo, queremos inserir o logo do R no meio de uma frase: ![logo R](http://developer.r-project.org/Logo/Rlogo-5.png).
+
+
+
+
+
+## 9. Inserir bloco com código R no relatório
+
+Iniciar escrevendo numa linha o comando ````{r}`, para abaixo começar o código em si, no final, escreve uma linha com três crases.
+
+```{r}
+#Vamos criar um vetor e depois mostrar
+a <- c(2,5,7,9,0)
+str(a)
+```
+
+
+## 9. Flags do código R no relatório
+
+#### echo
+
+Uso da flag echo: quando queremos ver apenas a saída que resulta de um comando do R, digitamos a prmeira linha do bloco assim: ````{r, echo=FALSE}`.
+
+
+```{r, echo=FALSE}
+#Vamos criar um vetor e depois mostrar
+a <- c(2,5,7,9,0)
+str(a)
+```
+
+
+#### eval
+
+E se você quiser mostrar o código e não mostrar a execução, digite na primeira linha do bloco: ````{r, eval=FALSE}`.
+
+```{r, eval=FALSE}
+#Vamos criar um vetor e depois mostrar
+a <- c(2,5,7,9,0)
+str(a)
+```
+

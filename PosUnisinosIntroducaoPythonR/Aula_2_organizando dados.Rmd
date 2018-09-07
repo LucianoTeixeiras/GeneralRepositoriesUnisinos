@@ -1,0 +1,88 @@
+---
+title: "Aula 2 - Manipulação de variáveis no R"
+author: "Patricia Kuyven"
+date: "30/08/2018"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R - Manipulação de variáveis
+
+## Entrada de dados
+
+### Definindo vetores
+
+```{r}
+vet1 <- c(23, 45, 82, 45, 14)
+vet1
+vet2 <- 1:10
+vet2
+vet3 <- rep(12,20)
+vet3
+```
+
+### Alterando/Consertando vetores
+
+```{r}
+vet1 <- c(23, 45, 82, 45, 14)
+vet1
+vet1[vet1>30] <- 50
+vet1
+```
+
+
+```{r}
+dat1 <- edit(data.frame())
+dat1
+```
+
+## Lendo arquivos com dados .txt
+
+Carregar o pacote `readr` e usar a função read.table, usando o argumento header=TRUE quando a primeira linha conter o nome das colunas.
+
+Para maiores informações consulte a documentação desta função com ?read.table.
+
+Há também as funções read.csv(), read.delim() e read.delim2() para ler arquivos texto.
+
+```{r}
+library(readr)
+dat2 <- read.table("~/Documents/passos do R/Aulas disciplina R/dados_exemplo1.txt", header=TRUE)
+dat2
+```
+
+
+
+## Leitura de arquivo .xls
+
+```{r, eval=FALSE}
+library(readr)
+dat3 <- read_excel("Documents/Unisinos/ESPECIALIZAÇÃO EM BIG DATA/disciplinas/Estatística/bd_evasao.xlsx")
+dat3
+```
+
+
+## Print somente das primeiras linhas
+
+```{r}
+head(mtcars)
+```
+
+
+## Reescrever um data.frame com apenas parte das colunas de outro
+
+
+```{r}
+dat4 <- mtcars[,c(1,5,7)]
+head(dat4)
+```
+
+## Transformar uma coluna de um data.frame
+
+```{r}
+mpg_x_5 <- dat4$mpg*5
+dat5 <- data.frame(dat4, mpg_x_5)
+head(dat5)
+```
