@@ -1,0 +1,68 @@
+---
+title: "ANP Brasil"
+subtitle: "Evolução do Preço dos combustíveis em 2012"
+author: "Luciano Teixeira"
+date: "11 de setembro de 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Comandos R de preparação e transformação de dados
+
+Resolva os exercícios a seguir utilizando os comandos no software RStudio através do RMarkdown. Gere um
+relatório em .doc com os comandos/código e as respectivas saídas e seus comentários.
+
+  * Exercício 1 - Crie um dataframe com 10 colunas e 40 linhas e imprima na tela as primeiras 6 linhas.
+  * Exercício 2 - Mostre a que classe pertence cada uma das 10 colunas do seu dataframe
+  * Exercício 3 - Utilize um comando que faça uma avaliação exploratória das variáveis do seu dataframe 
+                  e imprima na tela.
+  * Exercício 4 - Adicione mais uma coluna gerada a partir da transformação de uma das 10 originais.
+  * Exercício 5 - Faça um gráÒco que mostre a distribuição dos dados dessa nova variável do exercício 4
+
+# Dados da ANP - Agência Nacional do Petróleo
+
+## Evolução de Preço dos Combustíveis no último Bimestre de 2012
+
+### Exercícios
+
+1.Crie um dataframe com 10 colunas e 40+ linhas
+
+Carregando a biblioteca readr para leitura do arquivo em csv
+
+```{r library}
+library(readr)
+```
+
+Definindo a paste de trabalho onde se encontra o dataset
+
+```{r pwd}
+setwd("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosIntroducaoPythonR/Tarefa")
+```
+
+Lendo o arquivo "brasil.csv".
+
+```{r dataset}
+anpbrasil <- read_delim("brasil.csv", ";", escape_double = FALSE, trim_ws = TRUE)
+```
+
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
