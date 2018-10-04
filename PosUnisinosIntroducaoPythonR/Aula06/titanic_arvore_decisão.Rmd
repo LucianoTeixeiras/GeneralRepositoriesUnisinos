@@ -1,0 +1,93 @@
+---
+title: "Arvore de decisão no R: exemplo"
+author: "Patricia Kuyven"
+date: "02/10/2018"
+output: word_document
+---
+# 
+## Exemplo de Árvore de Decisão com a base do Titanic
+# 
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Vamos ler a base do Titanic, busque o arquivo Titanic3.csv que você copiou do material da aula de 04/10.
+# A variável "survived" indica se o passageiro sobreviveu (1) e se não sobreviveu (0).
+library(readr)
+titanic3 <- read_csv("/Users/cleoschneider/Documents/Unisinos/ESPECIALIZAÇÃO EM BIG DATA/disciplinas/Introdução a Python e linguagem R/titanic3.csv")
+titanic3$survived <- as.factor(titanic3$survived)
+```
+
+
+```{r}
+# Vamos separar a base em treino e teste
+
+## Gera indices da base treino e teste
+set.seed(1234)
+train_index = sample(1:nrow(titanic3), 0.7*nrow(titanic3), replace = FALSE);
+ 
+## Gera base treino e teste
+train = data.frame(); train = titanic3[train_index,]; test = data.frame(); test = titanic3[-train_index,];
+```
+
+```{r}
+# Neste exemplo a árvore para sobrevivência será modelada a partir das variáveis explicativas sex, age, pclass e fare
+
+# No R usamos a função rpart para trabalhar com "árvores de decisão".
+library(rpart)
+arvore <- rpart(survived ~ sex + age + pclass + fare, data = train)
+# Se fizermos o summary do modelo, temos uma descrição detalhada dos resultados obtidos para o modelo
+# summary(arvore)
+```
+
+
+```{r}
+# podemos visualizar a árvore
+library(rpart.plot)
+rpart.plot(arvore)
+```
+
+### Interpretação da árvore:
+### 
+### Observando o primeiro node, verificamos que 39% dentre todos os passageiros da base de teste sobreviveram. Ao considerar somente o sexo marculino, apenas 20% sobreviveu. E, ao considerar o sexo feminino, 71% sobreviveu (elas representam 37% da base total). Dentre as mulheres, se a classe da passageira era >= que 2,5, ou seja, 3ª classe, 49% sobreviveu; já as que viajaram de 1ª e 2ª classe, 92% sobreviveu. A interpretação pode continuar dessa forma recursivamente.
+### 
+
+
+```{r}
+# Vamos calcular a probabilidade de sobreviver "prob" e a "categoria prevista" para cada caso da base de teste.
+probabilidades <- predict(arvore, newdata = test, type = "prob")
+classes <- predict(arvore, newdata = test, type = 'class')
+hr_model_arvore <- cbind(test, classes)
+# Resumir os resultados
+library(ddalpha)
+library("caret")
+confusionMatrix <- confusionMatrix(hr_model_arvore$classes, hr_model_arvore$survived)
+confusionMatrix
+```
+
+
+
+
+```{r}
+## Obter data.frame com dados previstos e dados real para comparação
+dados_graf_p1 <- test[,c(2,4,5,9)]
+dados_graf_p2 <- probabilidades
+previsao <- classes
+dados_grafico <- data.frame(dados_graf_p1, dados_graf_p2, previsao)
+```
+
+```{r}
+## Montar GRÁFICO com dados previstos e dados reais para comparação
+library(ggplot2)
+data("dados_grafico", package = "ggplot2")
+graf_disp <- ggplot(dados_grafico, aes(x=age, y=X1)) +
+  geom_point(aes(col=survived)) +
+  labs(subtitle = "Titanic",
+       y = "Probabilidade de sobreviver", x = "Idade")
+ 
+plot(graf_disp)
+```
+
