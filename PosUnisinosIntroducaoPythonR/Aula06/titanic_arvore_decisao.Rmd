@@ -1,8 +1,10 @@
 ---
-title: "Arvore de decisão no R: exemplo"
+title: 'Arvore de decisÃ£o no R: exemplo'
 author: "Patricia Kuyven"
 date: "02/10/2018"
-output: word_document
+output:
+  pdf_document: default
+  word_document: default
 ---
 # 
 ## Exemplo de Árvore de Decisão com a base do Titanic
@@ -17,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Vamos ler a base do Titanic, busque o arquivo Titanic3.csv que você copiou do material da aula de 04/10.
 # A variável "survived" indica se o passageiro sobreviveu (1) e se não sobreviveu (0).
 library(readr)
-titanic3 <- read_csv("/Users/cleoschneider/Documents/Unisinos/ESPECIALIZAÇÃO EM BIG DATA/disciplinas/Introdução a Python e linguagem R/titanic3.csv")
+titanic3 <- read_csv("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosIntroducaoPythonR/Aula06/titanic3.csv")
 titanic3$survived <- as.factor(titanic3$survived)
 ```
 
