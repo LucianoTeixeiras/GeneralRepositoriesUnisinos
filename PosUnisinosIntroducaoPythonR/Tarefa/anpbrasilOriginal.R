@@ -32,6 +32,12 @@ paste("DESVIO_PADRAO_REVENDA = ", class(anpbrasil$DESVIO_PADRAO_REVENDA))
 paste("PRECO_MINIMO_REVENDA = ", class(anpbrasil$PRECO_MINIMO_REVENDA))
 paste("PRECO_MAXIMO_REVENDA	= ", class(anpbrasil$PRECO_MAXIMO_REVENDA))
 paste("MARGEM_MEDIA_REVENDA	= ", class(anpbrasil$MARGEM_MEDIA_REVENDA))
+paste("COEF_DE_VARIACAO_REVENDA = ", class(anpbrasil$COEF_DE_VARIACAO_REVENDA))
+paste("PRECO_MEDIO_DISTRIBUICAO	= ", class(anpbrasil$PRECO_MEDIO_DISTRIBUICAO))
+paste("DESVIO_PADRAO_DISTRIBUICAO = ", class(anpbrasil$DESVIO_PADRAO_DISTRIBUICAO))
+paste("PRECO_MINIMO_DISTRIBUICAO = ", class(anpbrasil$PRECO_MINIMO_DISTRIBUICAO))
+paste("PRECO_MAXIMO_DISTRIBUICAO = ", class(anpbrasil$PRECO_MAXIMO_DISTRIBUICAO))
+paste("COEF_DE_VARIACAO_DISTRIBUICAO = ", class(anpbrasil$COEF_DE_VARIACAO_DISTRIBUICAO))
 
 # Exercício 3 – Utilize um comando que faça uma avaliação exploratórias das variáveis do seu dataframe e imprima na tela. 
 
