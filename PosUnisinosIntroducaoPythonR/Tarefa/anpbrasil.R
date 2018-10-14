@@ -8,7 +8,7 @@ library(readr)
 
 setwd("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosIntroducaoPythonR/Tarefa")
 
-anpbrasil <- read_delim("brasil.csv", ";", escape_double = FALSE, trim_ws = TRUE)
+anpbrasil <- read_delim("brasil.csv", ";", escape_double = FALSE, locale = locale(decimal_mark = ","), trim_ws = TRUE)
 
 View(anpbrasil)
 
@@ -37,11 +37,15 @@ paste("MARGEM_MEDIA_REVENDA	= ", class(anpbrasil$MARGEM_MEDIA_REVENDA))
 
 summary(anpbrasil)
 
-# Exercício 4 - Adicione mais uma coluna gerada a partir da transformação de uma das 10 originais. 
+# Exercício 4 - Adicione mais colunas geradas a partir da transformação da coluna Preço Médio de Venda.
 
-anpbrasil$TOTAL_POSTOS <- (anpbrasil$POSTOS_PESQUISADOS/sum(anpbrasil$POSTOS_PESQUISADOS))/100
+anpbrasil$Desvio_Padrao <- sd(anpbrasil$PRECO_MEDIO_VENDA)
 
 head(anpbrasil)
 
 # Exercício 5 – Faça um gráfico que mostre a distribuição dos dados dessa nova variável do exercício 4.
 
+
+
+
+apply(anpbrasil, 1, median)
