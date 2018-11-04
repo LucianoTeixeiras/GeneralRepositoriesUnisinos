@@ -52,7 +52,7 @@ Definindo a diretório de trabalho com a função `setwd()`.
 
 ```{r pwd}
 
-setwd("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosIntroducaoPythonR/PrecoVoluntario")
+setwd("~/GitHub/GeneralRepositoriesUnisinos/PosUnisinosIntroducaoPythonR/PrecoVoluntarioR")
 
 ```
 

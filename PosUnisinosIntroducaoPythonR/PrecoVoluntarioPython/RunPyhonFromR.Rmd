@@ -1,7 +1,7 @@
 ---
-title: "Teste"
-author: "LTS"
-date: "14 de outubro de 2018"
+title: "RunPyhonFromR"
+author: "Luciano Teixeira"
+date: "29 de outubro de 2018"
 output: pdf_document
 ---
 
@@ -28,3 +28,9 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{python}
+import pandas
+csv = pandas.read_csv("2018-1_CA.csv")
+```
+
