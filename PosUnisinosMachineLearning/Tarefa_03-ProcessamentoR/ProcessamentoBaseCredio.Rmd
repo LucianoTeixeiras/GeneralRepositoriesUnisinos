@@ -1,8 +1,10 @@
 ---
-title: "Analise Base de Dados de Crédito"
+title: "Analise Base de Dados de CrÃ©dito"
 author: "Luciano Teixeira"
-date: "04 de novembro de 2018"
-output: pdf_document
+date: "05 de novembro de 2018"
+output:
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -20,19 +22,19 @@ O propósio deste relatorio é analisar ma base de dados de crédito com 2000 re
 ### 3 Historico Financeiro
 
 
-Foi uilizado o seguinte algoritmos de Machine Learning para avaliar a mesma base:
+Foi utilizado o seguinte algoritmos de Machine Learning para avaliar a mesma base:
 
 ### Árvore de Decisão
 
-Para este algorítmo, foi adoto alguns procedimentos de ajustes, "ETL", para eventuais correções, alterações, seja por conta de categorias de variaveis, seja por erro oriundos de intervenções manuais
+Para este algorítmo, foi adotado alguns procedimentos de ajustes, "ETL", para eventuais correções, alterações, seja por conta de categorias de variáveis, seja por erro oriundos de intervenções manuais.
 
 
 ### 1 Importação da base de dados, com o propósito de ler o arquivo csv para sua classificação;
 ### 2 Eliminação da coluna de clientid, pois não há propósito de categoria ou calssificação desta coluna;
 ### 3 Substituição de valores negativos pela média de idade positiva da base, a fim de minimizar a interferencia nos dados;
 ### 4 Substituição de vaores nulos "NA" pela média da idade possitiva, a fim de minimizar a interferencia nos dados;
-### 5 Efetuado o nivelamento da escala, por exemplo, entre a idade e a renda, pois a valor da renda em escala comparado à idade, é muito maior, sendo        assim, a aprendizagem não é eficiente;
-### 6 O Encode da Classe ou transformação do atributos categoricos em discretos, é fundamental pois diversas bibliotecas não aceitam como entrada,           atributos caegóricos.
+### 5 Efetuado o nivelamento da escala, por exemplo, entre a idade e a renda, pois a valor da renda em escala comparado à          idade, é muito maior, sendo        assim, a aprendizagem não é eficiente;
+### 6 O Encode da Classe ou transformação do atributos categoricos em discretos, é fundamental pois diversas bibliotecas não       aceitam como entrada,           atributos caegóricos.
 ### 7 Divisão da base em dados de treinamento e dados de teste.
 ### 8 DataSet: https://www.kaggle.com/macchi57/dataset/downloads/dataset.zip/1
 
@@ -96,7 +98,7 @@ confusao_ad = confusionMatrix(matriz_confusao)
 confusionMatrix(matriz_confusao)
 ```
 
-Como algoritmo mais eifciente temos o Regressão Logística, que pode ser constatado abaixo de acordo como a conerencia da matriz de confusão.
+Abaixo, seguem os dados de acuracidade do algorítimo de árvore de decisão de acordo como a conerencia da matriz de confusão.
 
 # Árvore de Decisão
 
